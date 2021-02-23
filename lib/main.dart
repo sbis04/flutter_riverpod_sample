@@ -13,11 +13,9 @@ void main() {
 
 final welcomeProvider = Provider((ref) => 'Welcome to Riverpod');
 
-class MyApp extends ConsumerWidget {
+class MyApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final welcomeString = watch(welcomeProvider);
-
+  Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Riverpod Sample',
       theme: ThemeData(
@@ -26,7 +24,13 @@ class MyApp extends ConsumerWidget {
       ),
       home: Scaffold(
         body: Center(
-          child: Text(welcomeString, style: textStyle),
+          child: Consumer(
+            builder: (context, watch, child) {
+              final welcomeString = watch(welcomeProvider);
+
+              return Text(welcomeString, style: textStyle);
+            },
+          ),
         ),
       ),
     );
