@@ -21,7 +21,7 @@ class FakeWeatherClient {
 final fakeWeatherClientProvider = Provider((ref) => FakeWeatherClient());
 
 final responseProvider =
-    FutureProvider.family<int, String>((ref, cityName) async {
+    FutureProvider.autoDispose.family<int, String>((ref, cityName) async {
   final weatherClient = ref.read(fakeWeatherClientProvider);
   return weatherClient.get(cityName);
 });
