@@ -13,7 +13,7 @@ void main() {
 
 class FakeWeatherClient {
   Future<int> get(String cityName) async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 2));
     return cityName == 'Texus' ? 18 : 21;
   }
 }
