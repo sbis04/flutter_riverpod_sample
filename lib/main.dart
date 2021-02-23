@@ -20,9 +20,10 @@ class FakeWeatherClient {
 
 final fakeWeatherClientProvider = Provider((ref) => FakeWeatherClient());
 
-final responseProvider = FutureProvider<int>((ref) async {
+final responseProvider =
+    FutureProvider.family<int, String>((ref, cityName) async {
   final weatherClient = ref.read(fakeWeatherClientProvider);
-  return weatherClient.get('Texus');
+  return weatherClient.get(cityName);
 });
 
 class MyApp extends StatelessWidget {
@@ -44,16 +45,21 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Consumer(
-          builder: (context, watch, child) {
-            final responseValue = watch(responseProvider);
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Consumer(
+              builder: (context, watch, child) {
+                final responseValue = watch(responseProvider('Texus'));
 
-            return responseValue.map(
-              data: (weather) => Text('${weather.value}', style: textStyle),
-              loading: (_) => CircularProgressIndicator(),
-              error: (message) => Text(message.error),
-            );
-          },
+                return responseValue.map(
+                  data: (weather) => Text('${weather.value}', style: textStyle),
+                  loading: (_) => CircularProgressIndicator(),
+                  error: (message) => Text(message.error),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
