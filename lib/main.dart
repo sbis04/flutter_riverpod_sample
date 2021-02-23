@@ -1,14 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
+
+class CounterNotifier extends ChangeNotifier {
+  int _value = 0;
+  int get value => _value;
+
+  void incrementValue() {
+    _value++;
+    notifyListeners();
+  }
+}
+
+final counterProvider = ChangeNotifierProvider((ref) => CounterNotifier());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Counter',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -28,12 +45,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  // int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  void _incrementCounter(BuildContext context) {
+    context.read(counterProvider).incrementValue();
   }
 
   @override
@@ -49,15 +64,20 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               'You have pushed the button this many times:',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            Consumer(
+              builder: (context, watch, child) {
+                final counterNotifier = watch(counterProvider);
+                return Text(
+                  '${counterNotifier.value}',
+                  style: Theme.of(context).textTheme.headline4,
+                );
+              },
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () => _incrementCounter(context),
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
