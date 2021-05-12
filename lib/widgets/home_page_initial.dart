@@ -20,7 +20,7 @@ class HomePageInitial extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               context
-                  .read(userNotifierProvider)
+                  .read(userNotifierProvider.notifier)
                   .getUserInfo(_userIdController.text);
             },
             child: Text('Get user info'),

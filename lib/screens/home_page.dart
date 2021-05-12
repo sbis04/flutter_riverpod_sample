@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: Consumer(
         builder: (context, watch, child) {
-          final state = watch(userNotifierProvider.state);
+          final state = watch(userNotifierProvider);
 
           return state.when(
             () => HomePageInitial(),
